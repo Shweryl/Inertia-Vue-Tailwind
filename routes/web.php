@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,7 +15,15 @@ use Inertia\Inertia;
 // Route::inertia('/about', 'About', ['user' => 'Ray Mon'])->name('about');
 
 Route::middleware('auth')->group(function(){
-    Route::inertia('/', 'Home', ['user' => User::paginate(5)])->name('home');
+    Route::get('/', function(Request $request){
+        // passing searched and paginated users
+        return inertia('Home', [
+            'users' => User::when($request->search, function($q) use ($request) {
+                $q->where('name', 'like', "%$request->search%");
+            })->paginate(5)->withQueryString(),
+            'searchTerm' => $request->search,
+        ]);
+    })->name('home');
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

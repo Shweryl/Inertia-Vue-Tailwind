@@ -17,6 +17,8 @@
     "dependencies": {
         "@inertiajs/vue3": "^2.0.0",
         "@vitejs/plugin-vue": "^5.2.1",
+        "flowbite": "^2.5.2",
+        "lodash": "^4.17.21",
         "vue": "^3.5.13"
     }
 }
